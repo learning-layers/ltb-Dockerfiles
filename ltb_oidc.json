@@ -1,0 +1,27 @@
+{
+  "application_type": "web",
+  "redirect_uris": [
+    "LAYERS_API_URI/ltb/api/public/auth",
+    "http://devapi.ltb.io/auth",
+    "https://api.ltb.io/auth"
+  ],
+  "client_name": "LTB_OIDC_CLIENT",
+  "client_uri": null,
+  "logo_uri": null,
+  "tos_uri": null,
+  "token_endpoint_auth_method": "client_secret_basic",
+  "scope": "openid offline_access email profile",
+  "grant_types": [
+    "authorization_code",
+    "refresh_token"
+  ],
+  "response_types": [
+    "code id_token",
+    "code token",
+    "code",
+    "code token id_token"
+  ],
+  "default_max_age": 60000,
+  "require_auth_time": true,
+  "client_secret_expires_at": 0
+}

@@ -1,0 +1,34 @@
+ltbdata:
+    container_name: ltbdata
+    image: learninglayers/ltb-data:0.1
+    env_file:
+        - common.env
+ltbweb:
+    container_name: ltbweb
+    image: learninglayers/ltb/web:1.0
+    volumes_from:
+        - ltbdata
+    env_file:
+        - common.env
+ltbapi:
+    container_name: ltbapi
+    image: learninglayers/ltb/api:0.6
+    volumes_from:
+        - ltbdata
+    env_file:
+        - common.env
+        - ltb.env
+    links:
+        - mysql
+        - oidc
+    actions:
+        - create_oidcclients: [ltb.env]
+ltbtilestore:
+    container_name: ltbtilestore
+    image: learninglayers/ltb/tilestore:0.02.09
+    volumes_from:
+        - ltbdata
+    env_file:
+        - common.env
+
+
