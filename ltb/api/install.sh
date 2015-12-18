@@ -1,40 +1,36 @@
 #!/bin/bash
 echo "Setting now ltb specific settings, getting the libraries (vendor) ready and populating our database"
-if [ $# -lt 7 ]; then
-    echo "you are sending not enough arguments";
-    echo "Usage: sh install.sh <LTB_MYSQL_HOST> <LTB_MYSQL_DB> <LTB_MYSQL_USER> <LTB_MYSQL_PASSWORD> <LTB_API_URI> <LTB_TS_URI> <LTB_HOME_DIR>"
-    exit;
-fi
 
 # create LTB database and user
-echo "Creating LTB database and user..." &&
-LTB_MYSQL_PASSWORD=`docker run --link mysql:mysql learninglayers/mysql-create -p$MYSQL_ROOT_PASSWORD --new-database $LTB_MYSQL_DB --new-user $LTB_MYSQL_USER | grep "mysql" | awk '{split($0,a," "); print a[3]}' | cut -c3-` &&
-echo " -> done" &&
-echo "" &&
+# echo "Creating LTB database and user..." &&
+# LTB_DB_PASSWORD=`docker run --link mysql:mysql learninglayers/mysql-create -p$MYSQL_ROOT_PASSWORD --new-database $LTB_DB_NAME --new-user $LTB_DB_USER | grep "mysql" | awk '{split($0,a," "); print a[3]}' | cut -c3-` &&
+# echo " -> done" &&
+# echo "" &&
 
-LTB_HOME_DIR="$7";
-CURRENT_DIR="$8";
+CURRENT_DIR="/home/ltb";
 LTB_UNIX_LOG="${LTB_HOME_DIR}/data/ltb_io_debug.log";
-
+echo "What will be the label for the learning toolbox?";
+read LEARNINGTOOLBOX_LABEL
 # Go to the installer directory
 cd $LTB_HOME_DIR;
 settings_file=config/autoload/instance.php
 sudo chown :www-data data && \
 sudo chmod g+w data && \
 cp -f config/autoload/instance.php.dist $settings_file && \
-sed -i "s#LTB_MYSQL_HOST#$1#g" $settings_file && \
-sed -i "s#LTB_MYSQL_DB#$2#g" $settings_file && \
-sed -i "s#LTB_MYSQL_USER#$3#g" $settings_file && \
-sed -i "s#LTB_MYSQL_PASSWORD#$4#g" $settings_file && \
-sed -i "s#LTB_API_URI#$5#g" $settings_file && \
-sed -i "s#LTB_TS_URI#$6#g" $settings_file && \
-sed -i "s#LTB_HOME_DIR#$7#g" $settings_file && \
-sed -i "s#LTB_UNIX_LOG#$LTB_UNIX_LOG#g" $settings_file && \
-sed -i "s#OIDC_URI#$OIDC_URI#g" $settings_file && \
-sed -i "s#OIDC_CLIENT#$OIDC_CLIENT#g" $settings_file && \
-sed -i "s#OIDC_SECRET#$OIDC_SECRET#g" $settings_file && \
-sed -i "s#SSS_URI#http://test-ll.know-center.tugraz.at/ltb-v2/#g" $settings_file && \
-sed -i "s#LTB_HOME_DIR#$7#g" /etc/apache2/apache2.conf && \
+sed -i "s#REPLACE:LTB_MYSQL_HOST#$LTB_MYSQL_HOST#g" $settings_file && \
+sed -i "s#REPLACE:LTB_DB_NAME#$LTB_DB_NAME#g" $settings_file && \
+sed -i "s#REPLACE:LTB_DB_USER#$LTB_DB_USER#g" $settings_file && \
+sed -i "s#REPLACE:LTB_DB_PASSWORD#$LTB_DB_PASSWORD#g" $settings_file && \
+sed -i "s#REPLACE:LTB_API_URI#$LTB_API_URI#g" $settings_file && \
+sed -i "s#REPLACE:LTB_TS_URI#$LTB_TS_URI#g" $settings_file && \
+sed -i "s#REPLACE:LTB_HOME_DIR#$LTB_HOME_DIR#g" $settings_file && \
+sed -i "s#REPLACE:LTB_UNIX_LOG#$LTB_UNIX_LOG#g" $settings_file && \
+sed -i "s#REPLACE:OIDC_URI#$OIDC_URI#g" $settings_file && \
+sed -i "s#REPLACE:OIDC_CLIENT#$OIDC_CLIENT#g" $settings_file && \
+sed -i "s#REPLACE:OIDC_SECRET#$OIDC_SECRET#g" $settings_file && \
+sed -i "s#REPLACE:SSS_URI#http://test-ll.know-center.tugraz.at/ltb-v2/#g" $settings_file && \
+sed -i "s#REPLACE:LTB_HOME_DIR#$LTB_API_HOME_DIR#g" /etc/apache2/apache2.conf && \
+sed -i "s#REPLACE:LTB_DOC_ROOT#$LTB_API_HOME_DIR#g" /etc/apache2/apache2.conf && \
 
 # ($LTB_VENDOR_AVAILABLE && mv /tmp/vendor /home/LTB-API) || (echo "Starting download of vendor software" && cd /home/LTB-API && php composer.phar install) && \
 # Determine whether in this docker context a vendor directory is made available

@@ -1,8 +1,7 @@
-FROM learninglayers/ltb/web
+FROM layersbox_ltbweb #should be learninglayers/ltbweb
 MAINTAINER Edwin Veenendaal <edwin at raycom.com>
 
-RUN git clone -b LTB-Tilestore-App https://github.com/learning-layers/LTB-Tilestore.git /home/LTB-Tilestore
-COPY ./node_npm.sh /home/LTB-Tilestore
+RUN git clone -b LTB-Tilestore-App https://github.com/learning-layers/LTB-Tilestore.git /home/ltb
 
 # RUN wget "http://nodejs.org/dist/v0.12.2/node-v0.12.2.tar.gz" | 
 # Installing node js and npm requires (at Unix): (from http://www.joyent.com/blog/installing-node-and-npm/)
@@ -14,10 +13,7 @@ COPY ./node_npm.sh /home/LTB-Tilestore
 #   GNU Make 3.81 or newer
 # then sh ./configure; make; make install
 
-
-
-# RUN curl -sL https://deb.nodesource.com/setup | sudo bash -
-# RUN sudo apt-get install -y nodejs
+COPY ./node_npm.sh /home/LTB-Tilestore
 RUN sudo apt-get install -y build-essential python
 WORKDIR /home/LTB-Tilestore
 RUN sudo sh node_npm.sh

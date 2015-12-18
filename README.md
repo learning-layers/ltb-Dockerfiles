@@ -1,2 +1,2 @@
 # ltb-Dockerfiles
-The Dockerfiles to create the Learning Toolbox containers
+The Dockerfiles for the Learning Toolbox.
