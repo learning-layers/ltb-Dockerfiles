@@ -4,6 +4,7 @@ and the right directories are copied or repositories checked out.
 There are two options for that: local (assuming the repositories have been checked out
 in a Windows environment and are connected to your virtual box by means of shared folders.
 All shared folders are nicknamed win_<real name>.
+
 The other option is remote and does not presuppose that the files are present. It assumes git
 is installed and checks out the necessary directories.
 

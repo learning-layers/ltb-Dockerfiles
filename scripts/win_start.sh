@@ -1,6 +1,4 @@
 #!/bin/bash
-echo "$@ waren de args"
-exit
 echo "Starting the Learning Layers Toolbox from Windows env";
 find ./ltb-Dockerfiles -type f -exec dos2unix {} \;
 find ./layersbox -type f -exec dos2unix {} \;

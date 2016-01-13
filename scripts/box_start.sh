@@ -13,7 +13,7 @@ function showHelp(){
         exit 1
 }
 
-dockerfiles="https://github.com/learning-layers/LayersBox.git"  # .git
+dockerfiles="https://github.com/learning-layers/LayersBox.git"
 do_dos2unix=0;
 get_layersbox=0;
 python_setup=0;
@@ -82,7 +82,7 @@ fi
 
 cd layersbox
 
-if [ "$python_setup" = "1" ]; then
+if [ "$python_setup" = "1" ] || [ "$new_layersbox_scripts" = "1" ]; then
     python setup.py install --user
 fi &&
 
@@ -123,7 +123,7 @@ After:
 # cd /home/ltb
 We will do the first two steps for you
 ";
-read SELF_URL -p "Type here your ip address"
+read -p "Type here your ip address" SELF_URL
 printf "$SELF_URL\n" | ./layersbox init 
 ./layersbox start
 
@@ -141,6 +141,7 @@ if [ "$go_on" = "y" ]; then
 	echo "Finished installing $repo"
 fi
 done
+echo "We are done now"
 # layersbox install learning-layers/openldap#0.0.5 for released version 0.0.5
 # layersbox install learning-layers/openldapaccount#0.0.5 for released version 0.0.5
 # layersbox install learning-layers/oidcclient#0.0.5 for released version 0.0.5

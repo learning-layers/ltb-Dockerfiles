@@ -2,7 +2,12 @@
 
 mkdir -p /home/ltb/docker;
 if [ "$1" = "remote" ]; then
+    cd /home/ltb/docker
     # git checkout layersbox
+    git clone --depth=1 https://github.com/learning-layers/LayersBox.git
+    git clone --depth=1 https://github.com/learning-layers/ltb-Dockerfiles.git
+    git clone --depth=1 https://github.com/learning-layers/LTB-API.git
+    git clone --depth=1 https://github.com/learning-layers/LTB-Tilestore.git
 else
     mkdir -p /home/ltb/layersbox;
     mkdir -p /home/ltb/ltb-Dockerfiles;
@@ -12,13 +17,20 @@ else
     # mount -t vboxsf <name of host dir> <name of guest dir>
     # mount -t vboxsf win_docker docker;
     # mount -t vboxsf win_vendor vendor;
-    mount -t vboxsf win_layersbox layersbox;
     mount -t vboxsf win_ltb-Dockerfiles ltb-Dockerfiles
     mount -t vboxsf win_ltb-api LTB-API;
-    cp -r layersbox docker
-    ln -s ltb-Dockerfiles docker
+    if [ mount -t vboxsf win_layersbox Layersbox ]; then
+        echo "Using existing layersbox files"
+    else 
+        echo "Cloning layersbox repo now"
+        git clone --depth=1 https://github.com/learning-layers/LayersBox.git
+    fi
+    cp -r Layersbox docker/layersbox
+    
+    # cp -p ltb-Dockerfiles docker We only need the scripts as the Dockerfiles come from Github    
+    cp ltb-Dockerfiles/scripts/* docker
     cd docker
-    cp ltb-Dockerfiles/scripts/* .
+    # the other files will be retrieved directly via git out of github
     echo "Go to the directory /home/ltb/docker and type sh box_start.sh -h to see how you can start the box";
-    echo "Go to the directory /home/ltb/docker and type sh box_start.sh -h to see how you can start the box";
+    echo "On Windows environments: type: sh /home/ltb/docker/win_start.sh";
 fi
