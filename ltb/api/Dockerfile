@@ -1,10 +1,11 @@
 FROM layersbox_ltbweb # should be learninglayers/ltb/web
 MAINTAINER Edwin Veenendaal <edwin at raycom.com>
 
-# Done in learningtoolbox-web : RUN apt-get update
+# Done in ltbweb : 
+# RUN apt-get update
 # RUN apt-get install -y php5-mysql
-# Done in learningtoolbox-web : RUN apt-get install -y git
-# Done in learningtoolbox-web :RUN a2enmod rewrite
+# RUN apt-get install -y git
+# RUN a2enmod rewrite
 
 # Clone the sources here
 
@@ -12,7 +13,7 @@ RUN git clone -b b_layersbox https://github.com/learning-layers/LTB-API.git /hom
 # Does not work COPY ./../../../../LTB-API $LTB_HOME_DIR # This copies the local mounted windows dir to the image
 
 COPY ./install.sh /home/LTB-API/docker/install.sh
-COPY /home/ltb/config/autoload/instance.php.dist /home/LTB-API/config/autoload/instance.php
+COPY /home/ltb/LTB-API/config/autoload/instance.php.dist /home/LTB-API/config/autoload/instance.php
 # This is a tryout
 COPY ./vendor/ /home/LTB-API/vendor
 

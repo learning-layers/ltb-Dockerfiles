@@ -1,4 +1,6 @@
 #!/bin/bash
+echo "$@ waren de args"
+exit
 echo "Starting the Learning Layers Toolbox from Windows env";
 find ./ltb-Dockerfiles -type f -exec dos2unix {} \;
 find ./layersbox -type f -exec dos2unix {} \;
@@ -10,4 +12,4 @@ dos2unix ./terminal_open.sh;
 
 echo "Conversion to Unix file format completed for Unix scripts. Starting up docker process...";
 sleep 6;
-sh box_start.sh;
+sh box_start.sh $@;

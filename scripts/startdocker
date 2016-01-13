@@ -1,0 +1,24 @@
+#!/bin/bash
+
+mkdir -p /home/ltb/docker;
+if [ "$1" = "remote" ]; then
+    # git checkout layersbox
+else
+    mkdir -p /home/ltb/layersbox;
+    mkdir -p /home/ltb/ltb-Dockerfiles;
+    # mkdir -p /home/ltb/vendor;
+    mkdir -p /home/ltb/LTB-API;
+    cd /home/ltb;
+    # mount -t vboxsf <name of host dir> <name of guest dir>
+    # mount -t vboxsf win_docker docker;
+    # mount -t vboxsf win_vendor vendor;
+    mount -t vboxsf win_layersbox layersbox;
+    mount -t vboxsf win_ltb-Dockerfiles ltb-Dockerfiles
+    mount -t vboxsf win_ltb-api LTB-API;
+    cp -r layersbox docker
+    ln -s ltb-Dockerfiles docker
+    cd docker
+    cp ltb-Dockerfiles/scripts/* .
+    echo "Go to the directory /home/ltb/docker and type sh box_start.sh -h to see how you can start the box";
+    echo "Go to the directory /home/ltb/docker and type sh box_start.sh -h to see how you can start the box";
+fi

@@ -2,7 +2,7 @@
 
 #The -x is for debugging
 function showHelp(){
-    echo " Usage: sh box_start2.sh [-h][-cleanoptions{dlpci}] where 
+    echo " Usage: sh box_start.sh [-h][-cleanoptions{dlpci}] where 
 	-d = dos2unix all files (default false) 
         -l = get newest layersbox toolkit (default false),
         -p = run a python setup (default false),
@@ -70,11 +70,13 @@ if [ "$do_dos2unix" = "1" ]; then
 	
 	find ./ltb-Dockerfiles -type f -exec dos2unix {} \;
 	find ./layersbox -type f -exec dos2unix {} \;
-	# dos2unix ./box_start.sh; # Only used in old Docker process
+	# dos2unix ./box_start.sh; # Already done if you are here
 	# dos2unix ./box_start2.sh;
-	dos2unix ./ltb_api_start.sh; # Only used in old Docker process
-	dos2unix ./ltb_ts_start.sh; # Only used in old Docker process
+	# dos2unix ./ltb_api_start.sh; # Only used in old Docker process
+	# dos2unix ./ltb_ts_start.sh; # Only used in old Docker process
 	dos2unix ./terminal_open.sh;
+    dos2unix ./clear.sh;
+    dos2unix ./addbox.sh;
 	echo "Conversion to Unix file format completed for Unix scripts. Starting up docker process..."; sleep 6;
 fi
 
@@ -109,10 +111,6 @@ fi
 echo "Done: starting now basic layersbox"
 p=`pwd`
 echo "We are now in $p"
-echo "Type here your ip address"
-read SELF_URL
-printf "$SELF_URL\n" | ./layersbox init 
-./layersbox start
 echo "Go to layersbbox dir if you are not there yet and type:
 layersbox init
 layersbox start
@@ -123,7 +121,12 @@ After:
 # layersbox install learning-layers/sss
 # layersbox install learning-layers/ltb
 # cd /home/ltb
+We will do the first two steps for you
 ";
+read SELF_URL -p "Type here your ip address"
+printf "$SELF_URL\n" | ./layersbox init 
+./layersbox start
+
 go_on='y'
 while [ "$go_on" = "y" ]
 do
