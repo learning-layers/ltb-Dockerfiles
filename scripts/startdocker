@@ -1,36 +1,60 @@
 #!/bin/bash
-
+api_git=https://github.com/learning-layers/LTB-API.git
+ts_git=https://github.com/learning-layers/LTB-Tilestore.git
+ltb_docker_git=https://github.com/learning-layers/ltb-Dockerfiles.git
+layersbox_git=https://github.com/learning-layers/LayersBox.git
 mkdir -p /home/ltb/docker;
 if [ "$1" = "remote" ]; then
     cd /home/ltb/docker
-    # git checkout layersbox
-    git clone --depth=1 https://github.com/learning-layers/LayersBox.git
-    git clone --depth=1 https://github.com/learning-layers/ltb-Dockerfiles.git
-    git clone --depth=1 https://github.com/learning-layers/LTB-API.git
-    git clone --depth=1 https://github.com/learning-layers/LTB-Tilestore.git
+    git clone --depth=1 $layersbox_git layersbox
+    git clone --depth=1 $ltb_docker_git
+    git clone --depth=1 $api_git
+    git clone --depth=1 $ts_git
+    cp ltb-Dockerfiles/scripts/* .    
 else
     mkdir -p /home/ltb/layersbox;
     mkdir -p /home/ltb/ltb-Dockerfiles;
-    # mkdir -p /home/ltb/vendor;
     mkdir -p /home/ltb/LTB-API;
     cd /home/ltb;
     # mount -t vboxsf <name of host dir> <name of guest dir>
-    # mount -t vboxsf win_docker docker;
+    # mkdir -p /home/ltb/vendor;
     # mount -t vboxsf win_vendor vendor;
-    mount -t vboxsf win_ltb-Dockerfiles ltb-Dockerfiles
-    mount -t vboxsf win_ltb-api LTB-API;
-    if [ mount -t vboxsf win_layersbox Layersbox ]; then
+    mount -t vboxsf win_docker docker;
+    if mount -t vboxsf win_ltb-Dockerfiles ltb-Dockerfiles; then
+        echo "Using existing ltb-Dockerfiles files"
+    else 
+        echo "Cloning ltb-Dockerfiles repo now"
+        git clone --depth=1 $ltb_docker_git
+    fi
+    cp -r ltb-Dockerfiles docker
+
+    if mount -t vboxsf win_ltb-api LTB-API; then
+        echo "Using existing LTB-API files"
+    else 
+        echo "Cloning LTB-API repo now"
+        git clone --depth=1 $api_git
+    fi
+    cp -r LTB-API docker
+
+    if mount -t vboxsf win_layersbox layersbox; then
         echo "Using existing layersbox files"
     else 
         echo "Cloning layersbox repo now"
-        git clone --depth=1 https://github.com/learning-layers/LayersBox.git
+        git clone --depth=1 $layersbox_git layersbox
     fi
-    cp -r Layersbox docker/layersbox
+    cp -r layersbox docker
     
-    # cp -p ltb-Dockerfiles docker We only need the scripts as the Dockerfiles come from Github    
-    cp ltb-Dockerfiles/scripts/* docker
+    # cp -p ltb-Dockerfiles docker We only need the scripts as the Dockerfiles come from Github
+    # but in some other scripts it is handy to have the whole directory
     cd docker
-    # the other files will be retrieved directly via git out of github
-    echo "Go to the directory /home/ltb/docker and type sh box_start.sh -h to see how you can start the box";
-    echo "On Windows environments: type: sh /home/ltb/docker/win_start.sh";
+    
+    echo "Starting the dos2unix conversion for Windows env";
+    find ./ltb-Dockerfiles -type f -exec dos2unix {} \;
+    find ./layersbox -type f -exec dos2unix {} \;
+    echo "Conversion to Unix file format completed for Unix scripts. Starting up docker process...";
 fi
+
+mv ./ltb-Dockerfiles/scripts/* .
+# the other files will be retrieved directly via git out of github
+echo "Go to the directory /home/ltb/docker and type sh box_start.sh -h to see how you can start the box";
+#echo "On Windows environments: type: sh /home/ltb/docker/win_start.sh";
