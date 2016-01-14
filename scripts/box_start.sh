@@ -5,7 +5,7 @@ function showHelp(){
     echo " Usage: sh box_start.sh [-h][-cleanoptions{dlpci}] where 
         -d = dos2unix all files (default 0) -d implies -n
         -l = get newest layersbox toolkit (default 0),
-        -n = get newest scripts from the ltb-Dockerfiles (default 0) Implies -d.
+        -n = get newest scripts from the ltb-Dockerfiles (default 0).
         -p = run a python setup (default 0),
         -c 1 = cleanup containers (default 1), (-c 0 for keeping 
 		the old containers)
@@ -15,12 +15,9 @@ function showHelp(){
         -h = echo help "
         exit 1
 }
-#here we keep the source files and the building directory 'docker'
-#So the current directory is $home_dir/docker == /home/ltb/docker
-home_dir="/home/ltb" 
 
 layersboxfiles="https://github.com/learning-layers/LayersBox.git"
-ltbdockerfiles="https://github.com/learning-layers/LayersBox.git"
+ltbdockerfiles="https://github.com/learning-layers/ltb-Dockerfiles.git"
 do_dos2unix=0;
 get_layersbox=0;
 python_setup=0;
@@ -162,17 +159,16 @@ if [ "$startup_clean" = "1" ]; then
 fi
 
 go_on='y'
-while [ "$go_on" = "y" ]
-do
-echo "Do you want to install new/more services? relevant might be openldap,oidcclient, sss, ltb y/n"
-read go_on
-echo "You wanted to stop or not $go_on"
-if [ "$go_on" = "y" ]; then
-	echo "What is the repo + version? type e.g. openldap#0.0.7?"
-	read repo
-    
-	layersbox install learning-layers/$repo
-	echo "Finished installing $repo"
-fi
+while [ "$go_on" = "y" ]; do
+    echo "Do you want to install new/more services? relevant might be openldap,openidconnect, openldapaccount,socialsemanticserver, ltb y/n"
+    read go_on
+    echo "You wanted to stop or not $go_on"
+    if [ "$go_on" = "y" ]; then
+        echo "What is the repo + version? type e.g. openldap#0.0.9?"
+        read repo
+
+        layersbox install learning-layers/$repo
+        echo "Finished installing $repo"
+    fi
 done
 echo "We are done now"
